@@ -7,10 +7,19 @@ export const register = async (req: Request, res: Response) => {
     const { username, email, password } = req.body;
 
     try {
-        const existingUser = await User.findOne({ email });
+        const existingUser = await User.findOne({
+            $or: [{ email }, { username }]
+        });
+
         if (existingUser) {
-            return res.status(400).json({ message: "El usuario ya existe" });
+            if (existingUser.email === email) {
+                return res.status(400).json({ message: "El email ya está registrado" });
+            }
+            if (existingUser.username === username) {
+                return res.status(400).json({ message: "El nombre de usuario ya está en uso" });
+            }
         }
+
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = new User({
@@ -32,7 +41,8 @@ export const register = async (req: Request, res: Response) => {
         });
 
     } catch (error) {
-        res.status(500).json({ message: "Error al registrar el usuario", error });
+        console.error("Error en el registro:", error);
+        res.status(500).json({ message: "Error interno del servidor al registrar el usuario" });
     }
 };
 
@@ -41,11 +51,11 @@ export const login = async (req: Request, res: Response) => {
     try {
         const user = await User.findOne({ email });
         if (!user || typeof user.password !== "string") {
-            return res.status(400).json({ message: "Usuario no encontrado" });
+            return res.status(400).json({ message: "Credenciales incorrectas" });
         }
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
-            return res.status(400).json({ message: "Contraseña incorrecta" });
+            return res.status(400).json({ message: "Credenciales incorrectas" });
         }
 
         const token = jwt.sign(
@@ -67,6 +77,7 @@ export const login = async (req: Request, res: Response) => {
         });
 
     } catch (error) {
-        res.status(500).json({ message: "Error al iniciar sesión", error });
+        console.error("Error en el inicio de sesión:", error);
+        res.status(500).json({ message: "Error interno del servidor al iniciar sesión" });
     }
 };
