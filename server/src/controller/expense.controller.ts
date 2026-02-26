@@ -26,7 +26,32 @@ export const createExpense = async (req: Request, res: Response) => {
 export const getExpenses = async (req: Request, res: Response) => {
     try {
         const userId = req.user.id;
-        const expenses = await Expense.find({ userId }).sort({ date: -1 });
+
+        // Tomamos los filtros opcionales del req.query
+        const { category, startDate, endDate } = req.query;
+
+        // Construimos un objeto de búsqueda base
+        const query: any = { userId };
+
+        // Si mandan categoría, la agregamos a la búsqueda
+        if (category) {
+            query.category = category;
+        }
+
+        // Si mandan fechas, creamos un filtro de rango
+        if (startDate || endDate) {
+            query.date = {};
+            if (startDate) {
+                query.date.$gte = new Date(startDate as string);
+            }
+            if (endDate) {
+                query.date.$lte = new Date(endDate as string);
+            }
+        }
+
+        // Buscamos usando este objeto construido dinámicamente
+        const expenses = await Expense.find(query).sort({ date: -1 });
+
         res.json(expenses);
     } catch (error) {
         console.error("Error al obtener gastos:", error);
