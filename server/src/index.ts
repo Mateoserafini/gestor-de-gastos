@@ -7,9 +7,12 @@ import expeseRouter from './routes/expense.routes.js';
 import categoryRouter from './routes/category.routes.js';
 import { connectDB } from './config/db.js';
 
+import cors from 'cors';
+
 const app: Application = express();
 const PORT = process.env.PORT;
 
+app.use(cors());
 app.use(express.json());
 
 app.get('/', (req: Request, res: Response) => {

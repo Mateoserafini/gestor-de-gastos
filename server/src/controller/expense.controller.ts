@@ -27,18 +27,14 @@ export const getExpenses = async (req: Request, res: Response) => {
     try {
         const userId = req.user.id;
 
-        // Tomamos los filtros opcionales del req.query
         const { category, startDate, endDate } = req.query;
 
-        // Construimos un objeto de búsqueda base
         const query: any = { userId };
 
-        // Si mandan categoría, la agregamos a la búsqueda
         if (category) {
             query.category = category;
         }
 
-        // Si mandan fechas, creamos un filtro de rango
         if (startDate || endDate) {
             query.date = {};
             if (startDate) {
@@ -49,7 +45,6 @@ export const getExpenses = async (req: Request, res: Response) => {
             }
         }
 
-        // Buscamos usando este objeto construido dinámicamente
         const expenses = await Expense.find(query).sort({ date: -1 });
 
         res.json(expenses);
