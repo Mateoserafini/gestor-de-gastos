@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
 
 const PrivateRoute = ({ children }: { children: ReactNode }) => {
   const { isAuthenticated } = useAuth();
@@ -14,16 +15,6 @@ const PublicRoute = ({ children }: { children: ReactNode }) => {
   return isAuthenticated ? <Navigate to="/" /> : <>{children}</>;
 };
 
-const Dashboard = () => {
-  const { user, logout } = useAuth();
-  return (
-    <div>
-      <h1>Dashboard</h1>
-      <p>Welcome, {user?.username}!</p>
-      <button onClick={logout}>Logout</button>
-    </div>
-  );
-};
 
 function App() {
   return (
