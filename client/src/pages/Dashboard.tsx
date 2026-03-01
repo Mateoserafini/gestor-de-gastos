@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/api';
 
@@ -12,6 +13,7 @@ interface Expense {
 
 export const Dashboard = () => {
     const { user, logout } = useAuth();
+    const navigate = useNavigate();
     const [expenses, setExpenses] = useState<Expense[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -41,6 +43,9 @@ export const Dashboard = () => {
 
             <main>
                 <h2>Your Expenses</h2>
+                <button onClick={() => navigate('/add-expense')}>
+                    + Add New Expense
+                </button>
                 {isLoading ? (
                     <p>Loading expenses...</p>
                 ) : error ? (
