@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import AddExpense from './pages/AddExpense';
+import AddIncome from './pages/AddIncome';
 
 const PrivateRoute = ({ children }: { children: ReactNode }) => {
   const { isAuthenticated } = useAuth();
@@ -45,6 +46,14 @@ function App() {
             element={
               <PrivateRoute>
                 <AddExpense />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/add-income"
+            element={
+              <PrivateRoute>
+                <AddIncome />
               </PrivateRoute>
             }
           />

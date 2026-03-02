@@ -8,7 +8,7 @@ interface Category {
     name: string;
 }
 
-export const AddExpense = () => {
+export const AddIncome = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [categories, setCategories] = useState<Category[]>([]);
     const [error, setError] = useState<string | null>(null);
@@ -16,9 +16,11 @@ export const AddExpense = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        // Fetch categories when the component mounts
         const fetchCategories = async () => {
             try {
                 const response = await api.get('/categories');
+                // Format the defaults into a mock Category object for the dropdown, and combine with customs
                 const defaultCats = response.data.defaults.map((name: string) => ({ _id: name, name }));
                 const customCats = response.data.customs.map((cat: any) => ({ _id: cat._id, name: cat.name }));
                 setCategories([...defaultCats, ...customCats]);
@@ -35,16 +37,17 @@ export const AddExpense = () => {
         setIsLoading(true);
         setError(null);
         try {
+            // Backend expects amount as a number, and date as an ISO string
             const formattedData = {
                 ...data,
                 amount: Number(data.amount),
                 date: new Date(data.date).toISOString()
             };
 
-            await api.post('/expenses', formattedData);
-            navigate('/');
+            await api.post('/incomes', formattedData);
+            navigate('/'); // Redirect back to dashboard on success
         } catch (err: any) {
-            setError(err.response?.data?.message || 'Error creating expense. Please try again.');
+            setError(err.response?.data?.message || 'Error creating income. Please try again.');
         } finally {
             setIsLoading(false);
         }
@@ -52,7 +55,7 @@ export const AddExpense = () => {
 
     return (
         <div>
-            <h2>Add New Expense</h2>
+            <h2>Add New Income</h2>
             {error && <div style={{ color: 'red' }}>{error}</div>}
 
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -81,19 +84,18 @@ export const AddExpense = () => {
                 </div>
 
                 <div>
-                    <label htmlFor="category">Category:</label>
+                    <label htmlFor="category">Category (Optional):</label>
                     <select
                         id="category"
-                        {...register('category', { required: 'Please select a category' })}
+                        {...register('category')}
                     >
-                        <option value="">-- Select a Category --</option>
+                        <option value="">-- None --</option>
                         {categories.map((cat) => (
                             <option key={cat._id} value={cat._id}>
                                 {cat.name}
                             </option>
                         ))}
                     </select>
-                    {errors.category && <span style={{ color: 'red' }}>{String(errors.category.message)}</span>}
                 </div>
 
                 <div>
@@ -107,7 +109,7 @@ export const AddExpense = () => {
                 </div>
 
                 <button type="submit" disabled={isLoading}>
-                    {isLoading ? 'Saving...' : 'Save Expense'}
+                    {isLoading ? 'Saving...' : 'Save Income'}
                 </button>
                 <button type="button" onClick={() => navigate('/')} disabled={isLoading}>
                     Cancel
@@ -117,4 +119,4 @@ export const AddExpense = () => {
     );
 };
 
-export default AddExpense;
+export default AddIncome;

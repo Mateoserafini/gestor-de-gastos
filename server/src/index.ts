@@ -5,6 +5,7 @@ import authRouter from './routes/auth.routes.js';
 import userRouter from './routes/user.routes.js';
 import expeseRouter from './routes/expense.routes.js';
 import categoryRouter from './routes/category.routes.js';
+import incomeRouter from './routes/income.routes.js';
 import { connectDB } from './config/db.js';
 
 import cors from 'cors';
@@ -23,6 +24,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
 app.use('/api/expenses', expeseRouter);
 app.use('/api/categories', categoryRouter);
+app.use('/api/incomes', incomeRouter);
 
 connectDB().then(() => {
     app.listen(PORT, () => console.log(`Servidor corriendo en http://localhost:${PORT}`));
