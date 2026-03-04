@@ -51,7 +51,7 @@ gestor-de-gastos/
 #### 1️⃣ Clonar el repositorio
 
 ```bash
-git clone [URL-DEL-REPO]
+git clone https://github.com/Mateoserafini/gestor-de-gastos
 cd gestor-de-gastos
 ```
 
@@ -134,6 +134,6 @@ Estos son los endpoints principales de la API para facilitar su consumo:
 
 ---
 
-## 👨‍💻 Autor
+## 👨‍💻 Autor Mateo Serafini
 
 Proyecto desarrollado como gestor de finanzas personales, implementando una arquitectura moderna y escalable basada en el ecosistema **MERN** y **TypeScript**.
