@@ -134,6 +134,6 @@ Estos son los endpoints principales de la API para facilitar su consumo:
 
 ---
 
-## 👨‍💻 Autor
-Mateo Serafini
+## 👨‍💻 Autor Mateo Serafini
+
 Proyecto desarrollado como gestor de finanzas personales, implementando una arquitectura moderna y escalable basada en el ecosistema **MERN** y **TypeScript**.
