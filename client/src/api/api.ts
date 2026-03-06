@@ -22,8 +22,9 @@ api.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response && error.response.status === 401) {
-            // Dispatch a custom event to notify the app that the user is unauthorized
-            window.dispatchEvent(new Event('unauthorized'));
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/login';
         }
         return Promise.reject(error);
     }

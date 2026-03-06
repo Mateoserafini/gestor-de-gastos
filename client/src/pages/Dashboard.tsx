@@ -46,6 +46,28 @@ export const Dashboard = () => {
         fetchData();
     }, []);
 
+    const handleDeleteIncome = async (id: string) => {
+        if (window.confirm('Are you sure you want to delete this income?')) {
+            try {
+                await api.delete(`/incomes/${id}`);
+                setIncomes(incomes.filter(income => income._id !== id));
+            } catch (err: any) {
+                setError(err.response?.data?.message || 'Error deleting income');
+            }
+        }
+    };
+
+    const handleDeleteExpense = async (id: string) => {
+        if (window.confirm('Are you sure you want to delete this expense?')) {
+            try {
+                await api.delete(`/expenses/${id}`);
+                setExpenses(expenses.filter(expense => expense._id !== id));
+            } catch (err: any) {
+                setError(err.response?.data?.message || 'Error deleting expense');
+            }
+        }
+    };
+
     const totalIncomes = incomes.reduce((acc, curr) => acc + curr.amount, 0);
     const totalExpenses = expenses.reduce((acc, curr) => acc + curr.amount, 0);
     const balance = totalIncomes - totalExpenses;
@@ -127,12 +149,23 @@ export const Dashboard = () => {
                             ) : (
                                 <ul className="space-y-3">
                                     {incomes.map((income) => (
-                                        <li key={income._id} className="flex justify-between items-center p-4 bg-white rounded-xl border border-brand-accent/10 shadow-sm hover:shadow-md transition-shadow">
+                                        <li key={income._id} className="group flex justify-between items-center p-4 bg-white rounded-xl border border-brand-accent/10 shadow-sm hover:shadow-md transition-all">
                                             <div className="flex items-start flex-col">
                                                 <strong className="text-brand-text font-semibold">{income.description}</strong>
                                                 <span className="text-xs text-brand-text/50 mt-1">{new Date(income.date).toLocaleDateString()}</span>
                                             </div>
-                                            <span className="font-bold text-green-600">+${income.amount.toFixed(2)}</span>
+                                            <div className="flex items-center gap-4">
+                                                <span className="font-bold text-green-600">+${income.amount.toFixed(2)}</span>
+                                                <button
+                                                    onClick={() => handleDeleteIncome(income._id)}
+                                                    className="text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity p-1.5 hover:bg-red-50 rounded-lg"
+                                                    title="Delete income"
+                                                >
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                    </svg>
+                                                </button>
+                                            </div>
                                         </li>
                                     ))}
                                 </ul>
@@ -175,12 +208,23 @@ export const Dashboard = () => {
                             ) : (
                                 <ul className="space-y-3">
                                     {expenses.map((expense) => (
-                                        <li key={expense._id} className="flex justify-between items-center p-4 bg-white rounded-xl border border-brand-accent/10 shadow-sm hover:shadow-md transition-shadow">
+                                        <li key={expense._id} className="group flex justify-between items-center p-4 bg-white rounded-xl border border-brand-accent/10 shadow-sm hover:shadow-md transition-all">
                                             <div className="flex items-start flex-col">
                                                 <strong className="text-brand-text font-semibold">{expense.description}</strong>
                                                 <span className="text-xs text-brand-text/50 mt-1">{new Date(expense.date).toLocaleDateString()}</span>
                                             </div>
-                                            <span className="font-bold text-brand-primary">-${expense.amount.toFixed(2)}</span>
+                                            <div className="flex items-center gap-4">
+                                                <span className="font-bold text-brand-primary">-${expense.amount.toFixed(2)}</span>
+                                                <button
+                                                    onClick={() => handleDeleteExpense(expense._id)}
+                                                    className="text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity p-1.5 hover:bg-red-50 rounded-lg"
+                                                    title="Delete expense"
+                                                >
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                    </svg>
+                                                </button>
+                                            </div>
                                         </li>
                                     ))}
                                 </ul>
