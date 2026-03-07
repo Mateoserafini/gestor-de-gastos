@@ -6,6 +6,8 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import AddExpense from './pages/AddExpense';
 import AddIncome from './pages/AddIncome';
+import EditExpense from './pages/EditExpense';
+import EditIncome from './pages/EditIncome';
 
 const PrivateRoute = ({ children }: { children: ReactNode }) => {
   const { isAuthenticated } = useAuth();
@@ -55,6 +57,22 @@ function App() {
               element={
                 <PrivateRoute>
                   <AddIncome />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/edit-income/:id"
+              element={
+                <PrivateRoute>
+                  <EditIncome />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/edit-expense/:id"
+              element={
+                <PrivateRoute>
+                  <EditExpense />
                 </PrivateRoute>
               }
             />
